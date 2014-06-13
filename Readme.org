@@ -40,6 +40,9 @@ Where to begin? :)
 - Finish the work on video files
 - Add unit tests
 
+* License
+Since I really care about improving the Swift code quality of this project, it would be sad if any work done on this ends up being proprietary instead of open for others to learn from. So I chose the GPL v2 as the license of this code. You can do whatever you want, as long as all your code modifications are also being open sourced for others to learn from.
+
 * Notes
 - "Kijito" means "Stream" in Swahili
 - Swi-jito is then the Swifting Stream
