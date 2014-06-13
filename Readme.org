@@ -1,0 +1,45 @@
+* Swijito
+** A  Apple iCloud Photostream Client in Swift
+   
+[[file:image.png]]
+   
+This is a simple client that allows you to view people's iCloud shared photo streams in an app on your Mac instead of having to open a browser for them. This is a very early relese, it lacks a ton of functionality.
+
+I've created it because I needed a simple non-toy project to improve my Swift knowledge. After going back and forth between different ideas, I decided to implement this, because it is something that I'd actually like to use myself
+
+* Status
+- This exists mainly to educate myself about Swift. Thus, the Swift code quality is currently sub par, as I'm trying to figure it out.
+- I plan to continously update this and refactor the Swift code to be better encapsulated, abstracted, and cleaner
+- Currently, not all streams load. Some just return zero data, even though the requests match their browser counterparts. I'm still investigating this
+- Very limited UI
+- Can't like or interact with an image
+- Only loads the full quality images, does not load the previews
+- Currently no support for video files (half done though)
+- This is more or less a learning project and not production quality code, so it lacks unit tests
+  
+* Usage
+
+If you add an account, you have to add the account id. I.e. in the following iCloud stream:
+#+BEGIN_SRC Sh
+https://www.icloud.com/photostream/#ANJtdd8978987s
+#+END_SRC
+
+then =ANJtdd8978987s= would be the account id that you need to enter into the =Add= dialog.
+
+
+* Todo
+Where to begin? :)
+- Load previews
+- Add icon view
+- Fix the bug that causes some streams to not load
+- Add support for liking items
+- Add support for commenting on items
+- Improve UI
+- Refactor Swift Code
+- Addd nice icon
+- Finish the work on video files
+- Add unit tests
+
+* Notes
+- "Kijito" means "Stream" in Swahili
+- Swi-jito is then the Swifting Stream
