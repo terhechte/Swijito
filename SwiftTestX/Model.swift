@@ -321,7 +321,9 @@ struct PhotoModel {
                     
                     // we need a list of guids to get data for
                     var guids:NSDictionary = NSDictionary(object: NSArray(array: photo_guids), forKey: "photoGuids")
-                    println(guids)
+                    
+                    
+                    
                     var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.fromMask(0), error: nil)
                     
                     
