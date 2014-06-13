@@ -320,9 +320,8 @@ struct PhotoModel {
                     // go channels, core async. Or just something like akka.
                     
                     // we need a list of guids to get data for
-                    var guids:NSDictionary = NSDictionary(object: NSArray(array: photo_guids), forKey: "photoGuids")
-                    
-                    
+                    let top_100 = photo_guids[0..(photo_guids.count < 100 ? photo_guids.count : 100)]
+                    var guids:NSDictionary = NSDictionary(object: NSArray(array: Array(top_100)), forKey: "photoGuids")
                     
                     var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.fromMask(0), error: nil)
                     

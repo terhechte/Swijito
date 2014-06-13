@@ -10,7 +10,6 @@ I've created it because I needed a simple non-toy project to improve my Swift kn
 * Status
 - This exists mainly to educate myself about Swift. Thus, the Swift code quality is currently sub par, as I'm trying to figure it out.
 - I plan to continously update this and refactor the Swift code to be better encapsulated, abstracted, and cleaner
-- Currently, not all streams load. Some just return zero data, even though the requests match their browser counterparts. I'm still investigating this
 - Very limited UI
 - Can't like or interact with an image
 - Only loads the full quality images, does not load the previews
@@ -31,7 +30,6 @@ then =ANJtdd8978987s= would be the account id that you need to enter into the =A
 Where to begin? :)
 - Load previews
 - Add icon view
-- Fix the bug that causes some streams to not load
 - Add support for liking items
 - Add support for commenting on items
 - Improve UI
@@ -39,6 +37,7 @@ Where to begin? :)
 - Addd nice icon
 - Finish the work on video files
 - Add unit tests
+- Add auto-loading of more items if users scroll down and if there're more than 100 items on the stream
 
 * License
 Since I really care about improving the Swift code quality of this project, it would be sad if any work done on this ends up being proprietary instead of open for others to learn from. So I chose the GPL v2 as the license of this code. You can do whatever you want, as long as all your code modifications are also being open sourced for others to learn from.
