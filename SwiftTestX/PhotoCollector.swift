@@ -21,6 +21,12 @@ class OutlineItem: NSObject {
     func hasChildren() -> Bool {
         return self.children.count > 0
     }
+    func itemCount() -> Int {
+        if let ac = self.account {
+            return ac.image_count
+        }
+        return 0
+    }
 }
 
 class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOutlineViewDataSource, NSOutlineViewDelegate {
@@ -147,8 +153,11 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
         
         view.prepareForReuse()
         
+        // TODO: Make Magic numbers a constant somewhere
+        let photoCellTag = 42
+        
         // only load & display the image if this method has been called
-        if let imageView:PhotoCellImageView = view.viewWithTag(42) as? PhotoCellImageView  {
+        if let imageView:PhotoCellImageView = view.viewWithTag(photoCellTag) as? PhotoCellImageView  {
             // The image will be downloaded upon first request of image, and then cached
             self.photos[row].cacheImage()
             imageView.bind("image", toObject: self.photos[row], withKeyPath: "image", options: nil)
@@ -228,8 +237,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     }
     
     func outlineView(outlineView: NSOutlineView!, objectValueForTableColumn tableColumn: NSTableColumn!, byItem item: AnyObject!) -> AnyObject! {
-        let o:OutlineItem = item as OutlineItem
-        return o.title
+        return item
     }
     
     func outlineView(outlineView: NSOutlineView!, shouldSelectItem item: AnyObject!) -> Bool {
