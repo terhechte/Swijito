@@ -8,6 +8,8 @@
    
 This is a simple client that allows you to view people's iCloud shared photo streams in an app on your Mac instead of having to open a browser for them. This is a very early relese, it lacks a ton of functionality.
 
+[[./Swijito-0.1.zip][You can download a binary for Mavericks+ here]]
+
 I've created it because I needed a simple non-toy project to improve my Swift knowledge. After going back and forth between different ideas, I decided to implement this, because it is something that I'd actually like to use myself
 
 * Status

@@ -16,6 +16,16 @@ case let a:
     println("is a value")
 }
 
+var a: NSDictionary = NSDictionary()
+
+switch (a["a"], a["b"], a["c"]) {
+case (.Some(let xa), .Some(let xb), .Some(let xc)):
+    println("xa \(xa) xb\(xb) xc\(xc)")
+default:
+    println("none")
+}
+
+
 
 
 
