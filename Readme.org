@@ -1,3 +1,6 @@
+
+[[file:icon.png]]
+
 * Swijito
 ** A  Apple iCloud Photostream Client in Swift
    
@@ -34,7 +37,6 @@ Where to begin? :)
 - Add support for commenting on items
 - Improve UI
 - Refactor Swift Code
-- Addd nice icon
 - Finish the work on video files
 - Add unit tests
 - Add auto-loading of more items if users scroll down and if there're more than 100 items on the stream
