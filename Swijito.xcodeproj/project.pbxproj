@@ -17,7 +17,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4D4B4A941949DBC600EE610B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		4D52FBBC19452BCB0012E7CA /* Swijito.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swijito.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D52FBC019452BCB0012E7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D52FBC119452BCB0012E7CA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -65,7 +64,6 @@
 				4D52FBBF19452BCB0012E7CA /* Supporting Files */,
 				4D52FC62194697DD0012E7CA /* Model.swift */,
 				4D52FC641946AFFC0012E7CA /* PhotoCollector.swift */,
-				4D4B4A941949DBC600EE610B /* MyPlayground.playground */,
 				4D874A0E194A00FC00765051 /* PhotoCellImageView.swift */,
 			);
 			name = Swijito;
