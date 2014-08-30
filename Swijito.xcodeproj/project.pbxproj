@@ -11,21 +11,10 @@
 		4D52FBC419452BCB0012E7CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FBC319452BCB0012E7CA /* AppDelegate.swift */; };
 		4D52FBC619452BCB0012E7CA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D52FBC519452BCB0012E7CA /* Images.xcassets */; };
 		4D52FBC919452BCB0012E7CA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D52FBC719452BCB0012E7CA /* MainMenu.xib */; };
-		4D52FBD519452BCB0012E7CA /* SwiftTestXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FBD419452BCB0012E7CA /* SwiftTestXTests.swift */; };
 		4D52FC63194697DD0012E7CA /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FC62194697DD0012E7CA /* Model.swift */; };
 		4D52FC651946AFFC0012E7CA /* PhotoCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FC641946AFFC0012E7CA /* PhotoCollector.swift */; };
 		4D874A0F194A00FC00765051 /* PhotoCellImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D874A0E194A00FC00765051 /* PhotoCellImageView.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4D52FBCF19452BCB0012E7CA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4D52FBB419452BCB0012E7CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4D52FBBB19452BCB0012E7CA;
-			remoteInfo = SwiftTestX;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4D4B4A941949DBC600EE610B /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
@@ -35,9 +24,6 @@
 		4D52FBC319452BCB0012E7CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4D52FBC519452BCB0012E7CA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4D52FBC819452BCB0012E7CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		4D52FBCE19452BCB0012E7CA /* SwijitoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwijitoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D52FBD319452BCB0012E7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4D52FBD419452BCB0012E7CA /* SwiftTestXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTestXTests.swift; sourceTree = "<group>"; };
 		4D52FC62194697DD0012E7CA /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		4D52FC641946AFFC0012E7CA /* PhotoCollector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollector.swift; sourceTree = "<group>"; };
 		4D874A0E194A00FC00765051 /* PhotoCellImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCellImageView.swift; sourceTree = "<group>"; };
@@ -51,13 +37,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4D52FBCB19452BCB0012E7CA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -65,7 +44,6 @@
 			isa = PBXGroup;
 			children = (
 				4D52FBBE19452BCB0012E7CA /* Swijito */,
-				4D52FBD119452BCB0012E7CA /* SwijitoTests */,
 				4D52FBBD19452BCB0012E7CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,7 +52,6 @@
 			isa = PBXGroup;
 			children = (
 				4D52FBBC19452BCB0012E7CA /* Swijito.app */,
-				4D52FBCE19452BCB0012E7CA /* SwijitoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,24 +81,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4D52FBD119452BCB0012E7CA /* SwijitoTests */ = {
-			isa = PBXGroup;
-			children = (
-				4D52FBD419452BCB0012E7CA /* SwiftTestXTests.swift */,
-				4D52FBD219452BCB0012E7CA /* Supporting Files */,
-			);
-			name = SwijitoTests;
-			path = SwiftTestXTests;
-			sourceTree = "<group>";
-		};
-		4D52FBD219452BCB0012E7CA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4D52FBD319452BCB0012E7CA /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,24 +101,6 @@
 			productReference = 4D52FBBC19452BCB0012E7CA /* Swijito.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4D52FBCD19452BCB0012E7CA /* SwijitoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4D52FBDB19452BCB0012E7CA /* Build configuration list for PBXNativeTarget "SwijitoTests" */;
-			buildPhases = (
-				4D52FBCA19452BCB0012E7CA /* Sources */,
-				4D52FBCB19452BCB0012E7CA /* Frameworks */,
-				4D52FBCC19452BCB0012E7CA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4D52FBD019452BCB0012E7CA /* PBXTargetDependency */,
-			);
-			name = SwijitoTests;
-			productName = SwiftTestXTests;
-			productReference = 4D52FBCE19452BCB0012E7CA /* SwijitoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -171,10 +112,6 @@
 				TargetAttributes = {
 					4D52FBBB19452BCB0012E7CA = {
 						CreatedOnToolsVersion = 6.0;
-					};
-					4D52FBCD19452BCB0012E7CA = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 4D52FBBB19452BCB0012E7CA;
 					};
 				};
 			};
@@ -192,7 +129,6 @@
 			projectRoot = "";
 			targets = (
 				4D52FBBB19452BCB0012E7CA /* Swijito */,
-				4D52FBCD19452BCB0012E7CA /* SwijitoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -204,13 +140,6 @@
 			files = (
 				4D52FBC619452BCB0012E7CA /* Images.xcassets in Resources */,
 				4D52FBC919452BCB0012E7CA /* MainMenu.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4D52FBCC19452BCB0012E7CA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,23 +158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4D52FBCA19452BCB0012E7CA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4D52FBD519452BCB0012E7CA /* SwiftTestXTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4D52FBD019452BCB0012E7CA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4D52FBBB19452BCB0012E7CA /* Swijito */;
-			targetProxy = 4D52FBCF19452BCB0012E7CA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4D52FBC719452BCB0012E7CA /* MainMenu.xib */ = {
@@ -358,44 +271,6 @@
 			};
 			name = Release;
 		};
-		4D52FBDC19452BCB0012E7CA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SwiftTestX.app/Contents/MacOS/SwiftTestX";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SwiftTestXTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				METAL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = SwijitoTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Debug;
-		};
-		4D52FBDD19452BCB0012E7CA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SwiftTestX.app/Contents/MacOS/SwiftTestX";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SwiftTestXTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				METAL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = SwijitoTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -413,15 +288,6 @@
 			buildConfigurations = (
 				4D52FBD919452BCB0012E7CA /* Debug */,
 				4D52FBDA19452BCB0012E7CA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4D52FBDB19452BCB0012E7CA /* Build configuration list for PBXNativeTarget "SwijitoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4D52FBDC19452BCB0012E7CA /* Debug */,
-				4D52FBDD19452BCB0012E7CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
