@@ -32,18 +32,19 @@ struct PhotoAccount {
     var userid: String
     var image_count: Int
     var host: String
+    
+    static func defaultHost() -> String {
+        return "p23-sharedstreams.icloud.com"
+    }
+    
     // Add a conversion function for NSDictionary
     // and the other way around
-    @conversion func __conversion() -> NSDictionary {
+    func toDictionary() -> NSDictionary {
         return ["username": self.username,
             "userid": self.userid,
             "streamname": self.streamname,
             "image_count": self.image_count as NSNumber,
             "host": self.host] as NSDictionary
-    }
-    
-    static func defaultHost() -> String {
-        return "p23-sharedstreams.icloud.com"
     }
     
     static func fromDictionary(delf: NSDictionary) -> PhotoAccount {
@@ -93,6 +94,7 @@ class PhotoObject : NSObject {
     var url: NSURL?
     
     init(d: NSDictionary) {
+        // TODO: Confusing Double / Float non-conversion issues
         var w: CDouble = 0
         var h: CDouble = 0
         var t: PhotoObjectType = PhotoObjectType.Photo
@@ -124,7 +126,7 @@ class PhotoObject : NSObject {
         let dx2: NSDate? = dx1.dateFromString(dateCreated)
 
         self.type = t
-        self.size = CGSizeMake(w, h)
+        self.size = CGSizeMake(CGFloat(w), CGFloat(h))
         self.created = dx2!
         self.caption = d["caption"] as NSString!
         self.contributor = (d["contributorFullName"] as NSString!,
@@ -140,7 +142,7 @@ class PhotoObject : NSObject {
         if self.image == nil {
             let r = NSURLRequest(URL: url)
             NSURLConnection.sendAsynchronousRequest(r, queue: NSOperationQueue(), completionHandler: {(r: NSURLResponse!, d: NSData!, e: NSError!) -> Void in
-                if !e {
+                if e != nil {
                     dispatch_async(dispatch_get_main_queue(), {() -> Void in
                         self.image = NSImage(data: d)
                         })
@@ -194,7 +196,7 @@ struct PhotoModel {
         // we're not using Array just yet, because I suppose it will break the compiler
         // as var p:Array = [1, 2, [3, 4]] does
         var current_accounts: NSMutableArray = self.load_accounts().mutableCopy() as NSMutableArray
-        current_accounts.addObject(account as NSDictionary)
+        current_accounts.addObject(account.toDictionary())
         store_accounts(current_accounts.copy() as NSArray)
     }
     
@@ -212,8 +214,8 @@ struct PhotoModel {
         store_accounts(mutable_current_accounts.copy() as NSArray)
     }
     
-    static func accounts() -> PhotoAccount[] {
-        var r:PhotoAccount[] = []
+    static func accounts() -> Array<PhotoAccount> {
+        var r:Array<PhotoAccount> = []
         for d:AnyObject in load_accounts() {
             let o = d as NSDictionary
             r.append(PhotoAccount.fromDictionary(o))
@@ -229,7 +231,7 @@ struct PhotoModel {
         let metaRequest: NSURLRequest = self.requestForURLString(ac.streamURLString(), payload: "{\"streamCtag\":null}")
         NSURLConnection.sendAsynchronousRequest(metaRequest, queue: NSOperationQueue(),
             completionHandler: {(r: NSURLResponse!, data: NSData!, e: NSError!) -> Void in
-                if e {
+                if e != nil {
                     dispatch_async(dispatch_get_main_queue(), {() -> Void in
                         handler(account: nil, error: e)
                         })
@@ -271,7 +273,7 @@ struct PhotoModel {
     
     // Read the json data from a persons feed,
     // Calls the handler closure when ready
-    static func loadStream(account: PhotoAccount, handler: (PhotoObject[]) -> ()) {
+    static func loadStream(account: PhotoAccount, handler: (Array<PhotoObject>) -> ()) {
         
         // we need two requests: One for the metadata
         // one for the actual file urls
@@ -290,7 +292,7 @@ struct PhotoModel {
         let metaRequest: NSURLRequest = self.requestForURLString(account.streamURLString(), payload: "{\"streamCtag\":null}")
         NSURLConnection.sendAsynchronousRequest(metaRequest, queue: queue,
             completionHandler: {(r: NSURLResponse!, data: NSData!, e: NSError!) -> Void in
-                if e {
+                if e != nil {
                     dispatch_async(dispatch_get_main_queue(), {() -> Void in
                         handler([])
                         })
@@ -320,10 +322,10 @@ struct PhotoModel {
                     // go channels, core async. Or just something like akka.
                     
                     // we need a list of guids to get data for
-                    let top_100 = photo_guids[0..(photo_guids.count < 100 ? photo_guids.count : 100)]
+                    let top_100 = photo_guids[0..<(photo_guids.count < 100 ? photo_guids.count : 100)]
                     var guids:NSDictionary = NSDictionary(object: NSArray(array: Array(top_100)), forKey: "photoGuids")
                     
-                    var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.fromMask(0), error: nil)
+                    var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.fromMask(0), error: nil)!
                     
                     
                     let fileRequest: NSURLRequest = self.requestForURLString(account.assetURLString(), payload: NSString(data: jsonGuids, encoding: NSUTF8StringEncoding))
@@ -362,7 +364,7 @@ struct PhotoModel {
                             }
                             
                             // finally, create a sorted array
-                            var sortedArray: PhotoObject[] = []
+                            var sortedArray: Array<PhotoObject> = []
                             for key in photo_sort {
                                 sortedArray.append(photo_container[key]!)
                             }

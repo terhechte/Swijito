@@ -42,13 +42,13 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     var accounts: Array<OutlineItem>
     
     // The current photos for the current account
-    var photos: PhotoObject[]
+    var photos: Array<PhotoObject>
     
     //------------------------------------------------------------------------
     // Initialization
     //------------------------------------------------------------------------
 
-    init()  {
+    override init()  {
         // NOTE: So apparently before calling super, all the non-optional
         // properties need to have an assignment
         // NOTE: super.init is optional, *unless* I'm using =self= in here
@@ -64,7 +64,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     // in NSViewController, I'm writing this for 10.9, so we'll do it
     // the old and ugly way
     func waitForView() {
-        if !self.tableView {
+        if self.tableView == nil {
             dispatch_after(1, dispatch_get_main_queue(), {() -> Void in
                 self.waitForView()
                 })
@@ -89,7 +89,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     //------------------------------------------------------------------------
     
     func updateForAccount(account: PhotoAccount) {
-        PhotoModel.loadStream(account, {(v: PhotoObject[]) -> () in
+        PhotoModel.loadStream(account, {(v: Array<PhotoObject>) -> () in
             self.photos = v
             self.tableView!.reloadData()
         })
@@ -97,7 +97,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     
     @IBAction func showAccountPanel(sender: AnyObject!) {
         self.addAccountErrorMessage!.stringValue = ""
-        self.tableView!.window.beginSheet(self.addAccountSheet!,
+        self.tableView!.window?.beginSheet(self.addAccountSheet!,
             completionHandler: nil)
     }
     
@@ -120,7 +120,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
                     return
                 }
                 
-                self.tableView!.window.endSheet(self.addAccountSheet!)
+                self.tableView!.window?.endSheet(self.addAccountSheet!)
 
                 })
         }
@@ -141,7 +141,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     }
     
     @IBAction func cancelAddAccount(sender: AnyObject?) {
-        self.tableView!.window.endSheet(self.addAccountSheet!)
+        self.tableView!.window?.endSheet(self.addAccountSheet!)
     }
     
     //------------------------------------------------------------------------

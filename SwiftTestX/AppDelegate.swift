@@ -10,15 +10,15 @@ import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate {
                             
-    @IBOutlet var window: NSWindow
+    @IBOutlet var window: NSWindow?
     
     // TODO: Apparently Xcode 6 can't find the PhotoCollector object in interface builder and doesn't allow me to connect to it
-    @IBOutlet var controller: PhotoCollector
+    @IBOutlet var controller: PhotoCollector?
 
 
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
         // Insert code here to initialize your application
-        self.window.titlebarAppearsTransparent = true
+        self.window?.titlebarAppearsTransparent = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification?) {
