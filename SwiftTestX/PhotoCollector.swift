@@ -108,7 +108,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
             PhotoModel.loadAccount(urlString, host: PhotoAccount.defaultHost(), handler: {(account: PhotoAccount?, error: NSError?) -> Void in
                 
                 if let e = error {
-                    self.addAccountErrorMessage!.stringValue = "Could not find Stream"
+                    self.addAccountErrorMessage!.stringValue = NSLocalizedString("Could not find Stream", comment: "")
                     return
                 }
                 
@@ -116,7 +116,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
                     PhotoModel.addAccount(a)
                     self.updateAccountOutlineView()
                 } else {
-                    self.addAccountErrorMessage!.stringValue = "Could not find User"
+                    self.addAccountErrorMessage!.stringValue = NSLocalizedString("Could not find User", comment: "")
                     return
                 }
                 
