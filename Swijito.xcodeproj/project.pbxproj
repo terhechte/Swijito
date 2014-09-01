@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D4BC96A19B4A50200AC8A00 /* UsefulFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4BC96919B4A50200AC8A00 /* UsefulFunctions.swift */; };
 		4D52FBC219452BCB0012E7CA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FBC119452BCB0012E7CA /* main.swift */; };
 		4D52FBC419452BCB0012E7CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D52FBC319452BCB0012E7CA /* AppDelegate.swift */; };
 		4D52FBC619452BCB0012E7CA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D52FBC519452BCB0012E7CA /* Images.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D4BC96919B4A50200AC8A00 /* UsefulFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsefulFunctions.swift; sourceTree = "<group>"; };
 		4D52FBBC19452BCB0012E7CA /* Swijito.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swijito.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D52FBC019452BCB0012E7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D52FBC119452BCB0012E7CA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				4D52FC62194697DD0012E7CA /* Model.swift */,
 				4D52FC641946AFFC0012E7CA /* PhotoCollector.swift */,
 				4D874A0E194A00FC00765051 /* PhotoCellImageView.swift */,
+				4D4BC96919B4A50200AC8A00 /* UsefulFunctions.swift */,
 			);
 			name = Swijito;
 			path = SwiftTestX;
@@ -149,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D52FC651946AFFC0012E7CA /* PhotoCollector.swift in Sources */,
+				4D4BC96A19B4A50200AC8A00 /* UsefulFunctions.swift in Sources */,
 				4D52FBC419452BCB0012E7CA /* AppDelegate.swift in Sources */,
 				4D874A0F194A00FC00765051 /* PhotoCellImageView.swift in Sources */,
 				4D52FBC219452BCB0012E7CA /* main.swift in Sources */,
