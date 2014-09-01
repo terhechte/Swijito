@@ -115,19 +115,16 @@ class PhotoObject : NSObject {
             h = (d["height"] as NSString).doubleValue
         }
         
-        // TODO: Abstract this away so it can be done in one line
-        let dx1: NSDateFormatter = NSDateFormatter()
-        dx1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        var dateCreated:NSString = d["dateCreated"] as NSString!
-        // date created can be the empty string
-        if dateCreated.length == 0 {
-            dateCreated = d["batchDateCreated"] as NSString!
-        }
-        let dx2: NSDate? = dx1.dateFromString(dateCreated)
-
         self.type = t
         self.size = CGSizeMake(CGFloat(w), CGFloat(h))
-        self.created = dx2!
+        
+        switch NSDateFormatter.validDateWithFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", values: d["dateCreated"], d["batchDateCreated"]) {
+        case let d:
+            self.created = d!
+        case .None:
+            self.created = NSDate()
+        }
+        
         self.caption = d["caption"] as NSString!
         self.contributor = (d["contributorFullName"] as NSString!,
                 d["contributorFirstName"] as NSString!,
