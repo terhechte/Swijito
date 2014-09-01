@@ -12,7 +12,7 @@ import Cocoa
 class PhotoCellImageView: NSImageView {
     
     override func drawRect(dirtyRect: NSRect) {
-        if let img = self.image {
+        if self.image != nil {
             super.drawRect(dirtyRect)
         } else {
             // no image | loading screen
