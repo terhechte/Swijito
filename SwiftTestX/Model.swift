@@ -15,7 +15,7 @@ func thrush (collection: NSDictionary, key:NSCopying...) -> AnyObject? {
     for i in key {
         if let v: AnyObject = val[i] {
             if v is NSDictionary {
-                val = v as NSDictionary
+                val = v as! NSDictionary
             } else {
                 return v
             }
@@ -32,14 +32,9 @@ struct PhotoAccount {
     var userid: String
     var image_count: Int
     var host: String
-    
-    static func defaultHost() -> String {
-        return "p23-sharedstreams.icloud.com"
-    }
-    
     // Add a conversion function for NSDictionary
     // and the other way around
-    func toDictionary() -> NSDictionary {
+    func asDictionary() -> NSDictionary {
         return ["username": self.username,
             "userid": self.userid,
             "streamname": self.streamname,
@@ -47,20 +42,24 @@ struct PhotoAccount {
             "host": self.host] as NSDictionary
     }
     
+    static func defaultHost() -> String {
+        return "p23-sharedstreams.icloud.com"
+    }
+    
     static func fromDictionary(delf: NSDictionary) -> PhotoAccount {
         // default host
         var host: String
         if delf["host"] != nil {
-            host = delf["host"]! as String
+            host = delf["host"]! as! String
         } else {
             // default
             host = PhotoAccount.defaultHost()
         }
         
-        return PhotoAccount(username: delf["username"] as NSString,
-            streamname: delf["streamname"] as NSString,
-            userid: delf["userid"] as NSString,
-            image_count: (delf["image_count"] as NSNumber).integerValue,
+        return PhotoAccount(username: delf["username"] as! NSString as String,
+            streamname: delf["streamname"] as! NSString as String,
+            userid: delf["userid"] as! NSString as String,
+            image_count: (delf["image_count"] as! NSNumber).integerValue,
             host: host)
     }
     
@@ -94,7 +93,6 @@ class PhotoObject : NSObject {
     var url: NSURL?
     
     init(d: NSDictionary) {
-        // TODO: Confusing Double / Float non-conversion issues
         var w: CDouble = 0
         var h: CDouble = 0
         var t: PhotoObjectType = PhotoObjectType.Photo
@@ -102,44 +100,47 @@ class PhotoObject : NSObject {
         // TODO: Try to use pattern matching to improve this awfull code
         // TODO: Activate video support
         if d.objectForKey("mediaAssetType") != nil {
-            let p:NSString = d["mediaAssetType"] as NSString!
+            let p:NSString = d["mediaAssetType"] as! NSString!
 
             if p == "video" {
-                w = (thrush(d, "derivatives", "PosterFrame", "width") as NSString).doubleValue
-                h = (thrush(d, "derivatives", "PosterFrame", "height") as NSString).doubleValue
+                w = (thrush(d, "derivatives", "PosterFrame", "width") as! NSString).doubleValue
+                h = (thrush(d, "derivatives", "PosterFrame", "height") as! NSString).doubleValue
                 t = PhotoObjectType.Video
             }
             
         } else {
-            w = (d["width"] as NSString).doubleValue
-            h = (d["height"] as NSString).doubleValue
+            w = (d["width"] as! NSString).doubleValue
+            h = (d["height"] as! NSString).doubleValue
         }
         
+        // TODO: Abstract this away so it can be done in one line
+        let dx1: NSDateFormatter = NSDateFormatter()
+        dx1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        var dateCreated:NSString = d["dateCreated"] as! NSString!
+        // date created can be the empty string
+        if dateCreated.length == 0 {
+            dateCreated = d["batchDateCreated"] as! NSString!
+        }
+        let dx2: NSDate? = dx1.dateFromString(dateCreated as String)
+
         self.type = t
         self.size = CGSizeMake(CGFloat(w), CGFloat(h))
-        
-        switch NSDateFormatter.validDateWithFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", values: d["dateCreated"], d["batchDateCreated"]) {
-        case let d:
-            self.created = d!
-        case .None:
-            self.created = NSDate()
-        }
-        
-        self.caption = d["caption"] as NSString!
-        self.contributor = (d["contributorFullName"] as NSString!,
-                d["contributorFirstName"] as NSString!,
-                d["contributorLastName"] as NSString!)
-        self.photoGuuid = d["photoGuid"]! as NSString
+        self.created = dx2!
+        self.caption = d["caption"] as! NSString!
+        self.contributor = (d["contributorFullName"] as! String,
+                d["contributorFirstName"] as! String,
+                d["contributorLastName"] as! String)
+        self.photoGuuid = d["photoGuid"]! as! String
         self.url = nil
-        self.checksum = thrush(d, "derivatives", String(Int(h)), "checksum") as NSString?
+        self.checksum = thrush(d, "derivatives", String(Int(h)), "checksum") as? String
     }
     
     // TODO: Surely there's a better way to do this than having a seperate cache image function?
     func cacheImage() {
         if self.image == nil {
-            let r = NSURLRequest(URL: url)
+            let r = NSURLRequest(URL: url!)
             NSURLConnection.sendAsynchronousRequest(r, queue: NSOperationQueue(), completionHandler: {(r: NSURLResponse!, d: NSData!, e: NSError!) -> Void in
-                if e != nil {
+                if (e == nil) {
                     dispatch_async(dispatch_get_main_queue(), {() -> Void in
                         self.image = NSImage(data: d)
                         })
@@ -151,7 +152,7 @@ class PhotoObject : NSObject {
 struct PhotoModel {
     
     static func requestForURLString(urlString: String, payload: String) -> NSURLRequest {
-        let url: NSURL = NSURL(string: urlString)
+        let url: NSURL = NSURL(string: urlString)!
         let req: NSMutableURLRequest = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 100.0)
         req.HTTPMethod = "POST"
         req.HTTPBody = payload.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -168,7 +169,7 @@ struct PhotoModel {
         
         req.setValue("(Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36", forHTTPHeaderField: "User-Agent")
         req.setValue("https://www.icloud.com/photostream/", forHTTPHeaderField: "Referer")
-        return req.copy() as NSURLRequest
+        return req.copy() as! NSURLRequest
     }
     
     //------------------------------------------------------------------------
@@ -192,29 +193,29 @@ struct PhotoModel {
         // accounts are just stored in the userdefaults
         // we're not using Array just yet, because I suppose it will break the compiler
         // as var p:Array = [1, 2, [3, 4]] does
-        var current_accounts: NSMutableArray = self.load_accounts().mutableCopy() as NSMutableArray
-        current_accounts.addObject(account.toDictionary())
-        store_accounts(current_accounts.copy() as NSArray)
+        var current_accounts: NSMutableArray = self.load_accounts().mutableCopy() as! NSMutableArray
+        current_accounts.addObject(account.asDictionary())
+        store_accounts(current_accounts.copy() as! NSArray)
     }
     
     static func removeAccount(account: PhotoAccount) {
         let current_accounts: NSArray = self.load_accounts()
-        var mutable_current_accounts: NSMutableArray = current_accounts.mutableCopy() as NSMutableArray
+        var mutable_current_accounts: NSMutableArray = current_accounts.mutableCopy() as! NSMutableArray
         for a:AnyObject in current_accounts {
             // TODO: There ought to be a better way around this...
-            let d = a as NSDictionary
-            let u:String = a["userid"]! as String
+            let d = a as! NSDictionary
+            let u:String = a["userid"]! as! String
             if u == account.userid {
                 mutable_current_accounts.removeObject(a)
             }
         }
-        store_accounts(mutable_current_accounts.copy() as NSArray)
+        store_accounts(mutable_current_accounts.copy() as! NSArray)
     }
     
-    static func accounts() -> Array<PhotoAccount> {
-        var r:Array<PhotoAccount> = []
+    static func accounts() -> [PhotoAccount] {
+        var r:[PhotoAccount] = []
         for d:AnyObject in load_accounts() {
-            let o = d as NSDictionary
+            let o = d as! NSDictionary
             r.append(PhotoAccount.fromDictionary(o))
         }
         return r
@@ -233,7 +234,7 @@ struct PhotoModel {
                         handler(account: nil, error: e)
                         })
                 } else {
-                    let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                    let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
                     
                     // if we got a forwarding call, we update with the new info
                     if let newHost: String = jsonResult["X-Apple-MMe-Host"] as? String {
@@ -252,11 +253,11 @@ struct PhotoModel {
                     
                     // return info about this account
                     
-                    let username: String = (jsonResult["userFirstName"]! as String) + " " + (jsonResult["userLastName"]! as String)
+                    let username: String = (jsonResult["userFirstName"]! as! String) + " " + (jsonResult["userLastName"]! as! String)
                     let newAccount: PhotoAccount = PhotoAccount(username: username,
-                        streamname: jsonResult["streamName"]! as String,
+                        streamname: jsonResult["streamName"]! as! String,
                         userid: userid,
-                        image_count: (jsonResult["photos"]! as NSArray).count,
+                        image_count: (jsonResult["photos"]! as! NSArray).count,
                         host: ac.host)
                     handler(account: newAccount, error: nil)
                 }
@@ -270,7 +271,7 @@ struct PhotoModel {
     
     // Read the json data from a persons feed,
     // Calls the handler closure when ready
-    static func loadStream(account: PhotoAccount, handler: (Array<PhotoObject>) -> ()) {
+    static func loadStream(account: PhotoAccount, handler: ([PhotoObject]) -> ()) {
         
         // we need two requests: One for the metadata
         // one for the actual file urls
@@ -293,13 +294,17 @@ struct PhotoModel {
                     dispatch_async(dispatch_get_main_queue(), {() -> Void in
                         handler([])
                         })
-                } else {
-                    let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                } else if (data.length == 0) {
+                    dispatch_async(dispatch_get_main_queue(), {() -> Void in
+                        handler([])
+                        })
+                    } else {
+                    let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
                     // TODO: A bit verbose and cumbersome, but putting it in one line
                     // crashes the type inferencer
-                    var photos: NSArray = jsonResult["photos"] as NSArray
+                    var photos: NSArray = jsonResult["photos"] as! NSArray
                     for photo:AnyObject in photos {
-                        let aPhoto:NSDictionary = photo as NSDictionary
+                        let aPhoto:NSDictionary = photo as! NSDictionary
                         
                         // ignore videos (for now)
                         // TODO: Activate them again
@@ -322,14 +327,14 @@ struct PhotoModel {
                     let top_100 = photo_guids[0..<(photo_guids.count < 100 ? photo_guids.count : 100)]
                     var guids:NSDictionary = NSDictionary(object: NSArray(array: Array(top_100)), forKey: "photoGuids")
                     
-                    var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.fromMask(0), error: nil)!
+                    var jsonGuids: NSData = NSJSONSerialization.dataWithJSONObject(guids, options: NSJSONWritingOptions.allZeros, error: nil)!
                     
                     
-                    let fileRequest: NSURLRequest = self.requestForURLString(account.assetURLString(), payload: NSString(data: jsonGuids, encoding: NSUTF8StringEncoding))
+                    let fileRequest: NSURLRequest = self.requestForURLString(account.assetURLString() as String, payload: NSString(data: jsonGuids, encoding: NSUTF8StringEncoding) as! String)
                     NSURLConnection.sendAsynchronousRequest(fileRequest, queue: queue,
                         completionHandler: {(r: NSURLResponse!, data: NSData!, e: NSError!) -> Void in
                             
-                            let httpResponse: NSHTTPURLResponse = r as NSHTTPURLResponse
+                            let httpResponse: NSHTTPURLResponse = r as! NSHTTPURLResponse
                             
                             // sometimes we get empty data packages here. I haven't really understood why yet,
                             if data.length == 0 {
@@ -337,31 +342,31 @@ struct PhotoModel {
                                 return
                             }
                             
-                            let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                            let jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
                             
                             // our temporary storage for the locations
                             var locationEndPoints: Dictionary<String, String> = [:]
                             
                             // TODO: Why do I have to explicitly cast NS' types all over the place?
-                            var locations: NSDictionary = jsonResult["locations"] as NSDictionary
-                            let items: NSDictionary = jsonResult["items"] as NSDictionary
+                            var locations: NSDictionary = jsonResult["locations"] as! NSDictionary
+                            let items: NSDictionary = jsonResult["items"] as! NSDictionary
                             for key : AnyObject in items.allKeys {
-                                var item: NSDictionary = items[key as NSString] as NSDictionary
+                                var item: NSDictionary = items[key as! NSString] as! NSDictionary
                                 // we build a URL String out of all these items
-                                let locationInfo: NSDictionary = locations[item["url_location"] as NSString] as NSDictionary
-                                let locationHosts = locationInfo["hosts"] as NSArray
+                                let locationInfo: NSDictionary = locations[item["url_location"] as! NSString] as! NSDictionary
+                                let locationHosts = locationInfo["hosts"] as! NSArray
                                 if locationHosts.count == 0 {continue}
-                                var url: String = (locationInfo["scheme"] as String) + "://" + (locationHosts[0] as String) + (item["url_path"] as String)
-                                locationEndPoints[key as String] = url
+                                var url: String = (locationInfo["scheme"] as! String) + "://" + (locationHosts[0] as! String) + (item["url_path"] as! String)
+                                locationEndPoints[key as! String] = url
                                 
                                 // assign the url
-                                if let obj: PhotoObject = photo_container[key as String] {
+                                if let obj: PhotoObject = photo_container[key as! String] {
                                     obj.url = NSURL(string: url)
                                 }
                             }
                             
                             // finally, create a sorted array
-                            var sortedArray: Array<PhotoObject> = []
+                            var sortedArray: [PhotoObject] = []
                             for key in photo_sort {
                                 sortedArray.append(photo_container[key]!)
                             }

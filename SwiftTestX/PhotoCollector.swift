@@ -42,7 +42,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     var accounts: Array<OutlineItem>
     
     // The current photos for the current account
-    var photos: Array<PhotoObject>
+    var photos: [PhotoObject]
     
     //------------------------------------------------------------------------
     // Initialization
@@ -89,7 +89,7 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     //------------------------------------------------------------------------
     
     func updateForAccount(account: PhotoAccount) {
-        PhotoModel.loadStream(account, {(v: Array<PhotoObject>) -> () in
+        PhotoModel.loadStream(account, handler: {(v: [PhotoObject]) -> () in
             self.photos = v
             self.tableView!.reloadData()
         })
@@ -97,18 +97,19 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     
     @IBAction func showAccountPanel(sender: AnyObject!) {
         self.addAccountErrorMessage!.stringValue = ""
-        self.tableView!.window?.beginSheet(self.addAccountSheet!,
+        self.tableView!.window!.beginSheet(self.addAccountSheet!,
             completionHandler: nil)
     }
     
     @IBAction func addAccount(sender: AnyObject!) {
-        if let urlString: String = self.addAccountURLField!.stringValue {
+        if let field = self.addAccountURLField {
+            let urlString = field.stringValue
             // TODO: parse the user id out of the url
             // for now we're only accepting the extracted id...
             PhotoModel.loadAccount(urlString, host: PhotoAccount.defaultHost(), handler: {(account: PhotoAccount?, error: NSError?) -> Void in
                 
                 if let e = error {
-                    self.addAccountErrorMessage!.stringValue = NSLocalizedString("Could not find Stream", comment: "")
+                    self.addAccountErrorMessage!.stringValue = "Could not find Stream"
                     return
                 }
                 
@@ -116,11 +117,11 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
                     PhotoModel.addAccount(a)
                     self.updateAccountOutlineView()
                 } else {
-                    self.addAccountErrorMessage!.stringValue = NSLocalizedString("Could not find User", comment: "")
+                    self.addAccountErrorMessage!.stringValue = "Could not find User"
                     return
                 }
                 
-                self.tableView!.window?.endSheet(self.addAccountSheet!)
+                self.tableView!.window!.endSheet(self.addAccountSheet!)
 
                 })
         }
@@ -141,41 +142,43 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
     }
     
     @IBAction func cancelAddAccount(sender: AnyObject?) {
-        self.tableView!.window?.endSheet(self.addAccountSheet!)
+        self.tableView!.window!.endSheet(self.addAccountSheet!)
     }
     
     //------------------------------------------------------------------------
     // Photos Table View
     //------------------------------------------------------------------------
     
-    func tableView(tableView: NSTableView!, viewForTableColumn tableColumn: NSTableColumn!, row: Int) -> NSView! {
-        let view : AnyObject! = self.tableView!.makeViewWithIdentifier(tableColumn.identifier!, owner: self)
-        
-        view.prepareForReuse()
-        
-        // TODO: Make Magic numbers a constant somewhere
-        let photoCellTag = 42
-        
-        // only load & display the image if this method has been called
-        if let imageView:PhotoCellImageView = view.viewWithTag(photoCellTag) as? PhotoCellImageView  {
-            // The image will be downloaded upon first request of image, and then cached
-            self.photos[row].cacheImage()
-            imageView.bind("image", toObject: self.photos[row], withKeyPath: "image", options: nil)
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        if let view = self.tableView!.makeViewWithIdentifier(tableColumn!.identifier!, owner: self) {
+            view.prepareForReuse()
+            
+            // TODO: Make Magic numbers a constant somewhere
+            let photoCellTag = 42
+            
+            // only load & display the image if this method has been called
+            if let imageView:PhotoCellImageView = view.viewWithTag(photoCellTag) as? PhotoCellImageView  {
+                // The image will be downloaded upon first request of image, and then cached
+                self.photos[row].cacheImage()
+                imageView.bind("image", toObject: self.photos[row], withKeyPath: "image", options: nil)
+            }
+            
+            return view as! NSView
         }
         
-        return view as NSView
+        return nil;
     }
     
-    func numberOfRowsInTableView(tableView: NSTableView!) -> Int {
+    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
         return self.photos.count
     }
 
-    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
+    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
         let r:PhotoObject = self.photos[row]
         return r
     }
     
-    func tableView(tableView: NSTableView!, heightOfRow row: Int) -> CGFloat {
+    func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         // calculate the height of the row based on the image ratio & the current width
         // but don't go beyond the max height
         let currentWidth = self.tableView!.frame.size.width
@@ -212,36 +215,36 @@ class PhotoCollector: NSObject, NSTableViewDelegate, NSTableViewDataSource, NSOu
         }
     }
     
-    func outlineView(outlineView: NSOutlineView!, numberOfChildrenOfItem item: AnyObject!) -> Int {
+    func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
         if let theItem: AnyObject = item {
             // not the root item
-            let o:OutlineItem = item as OutlineItem
+            let o:OutlineItem = item as! OutlineItem
             return o.children.count
         }
         // otherwise, just one headline so far
         return self.accounts.count
     }
     
-    func outlineView(outlineView: NSOutlineView!, child index: Int, ofItem item: AnyObject!) -> AnyObject! {
+    func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
         if let theItem: AnyObject = item {
             // not the root item
-            let o:OutlineItem = item as OutlineItem
+            let o:OutlineItem = item as! OutlineItem
             return o.children[index]
         }
         return self.accounts[index]
     }
     
-    func outlineView(outlineView: NSOutlineView!, isItemExpandable item: AnyObject!) -> Bool {
-        let o:OutlineItem = item as OutlineItem
+    func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
+        let o:OutlineItem = item as! OutlineItem
         return o.hasChildren()
     }
     
-    func outlineView(outlineView: NSOutlineView!, objectValueForTableColumn tableColumn: NSTableColumn!, byItem item: AnyObject!) -> AnyObject! {
+    func outlineView(outlineView: NSOutlineView, objectValueForTableColumn tableColumn: NSTableColumn?, byItem item: AnyObject?) -> AnyObject? {
         return item
     }
     
-    func outlineView(outlineView: NSOutlineView!, shouldSelectItem item: AnyObject!) -> Bool {
-        let o:OutlineItem = item as OutlineItem
+    func outlineView(outlineView: NSOutlineView, shouldSelectItem item: AnyObject) -> Bool {
+        let o:OutlineItem = item as! OutlineItem
         if o.hasChildren() {
             return false
         } else {

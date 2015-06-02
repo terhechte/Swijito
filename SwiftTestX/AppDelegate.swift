@@ -17,10 +17,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
-        // This only works on Yosemite or newer
-        if self.window!.respondsToSelector(Selector("titlebarAppearsTransparent")) {
-            self.window?.titlebarAppearsTransparent = true
-        }
+        // Insert code here to initialize your application
+        self.window!.titlebarAppearsTransparent = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification?) {
