@@ -1,4 +1,4 @@
->  A couple of notes:
+* Important Info!
     - The code is awful. Now that proper JSON handling tools for Swift exist, a huge part of the JSON code should be thrown away
     - This was written right after WWDC 2014, when Swift relied much more on Foundation types (or rather, when one had to, because the native Swift types lacked a lot of functionality). This is not the case anymore, and the overuse of Foundation types should be thrown away.
     - I hope to find some time to properly rewrite this app. Given the current state, a full rewrite would be better than trying to fix the code as it stands right now.
